@@ -22,7 +22,8 @@ const AddMovieForm = () => {
 
     const submitHandler = event => {
         event.preventDefault()
-        console.log(title,openingText, releaseDate)
+        const newMovieObj = {title: title, openingText: openingText, releaseDate: releaseDate}
+        console.log(newMovieObj)
     }
   return (
     <form className={classes.control} onSubmit={submitHandler}>
