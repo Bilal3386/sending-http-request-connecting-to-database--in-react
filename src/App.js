@@ -2,21 +2,22 @@ import React, { useState, useEffect } from "react";
 
 import MoviesList from "./components/MoviesList";
 import "./App.css";
+import { useCallback } from "react";
 
 function App() {
   const [movies, setMovies] = useState([]);
   const [isLoader, setIsLoader] = useState(false);
   const [error, setError] = useState(null);
-  const [stop, setStop] = useState(null);
+  // const [stop, setStop] = useState(null);
 
-  useEffect(() => {});
+ 
 
-  async function fetchMoviesHandler() {
+  const  fetchMoviesHandler = useCallback(async() =>   {
     setIsLoader(true);
     setError(null);
-    setStop(null);
+    // setStop(null);
     try {
-      const response = await fetch("https://swapi.py4e.com/api/film/");
+      const response = await fetch("https://swapi.py4e.com/api/films/");
       if (!response.ok) {
 
         throw new Error("Something went wrong ....Retrying");
@@ -37,18 +38,22 @@ function App() {
       setIsLoader(false);
     } catch (error) {
       setError(error.message);
-      const interval = setInterval(async() => {
-        await fetch("https://swapi.py4e.com/api/films/");
-      }, 1000);
-      setStop(interval);
+      // const interval = setInterval(async() => {
+      //   await fetch("https://swapi.py4e.com/api/films/");
+      // }, 1000);
+      // setStop(interval);
       setIsLoader(false);
     }
-  }
+  }, [])
 
-  const stopRetryingHandler = () => {
-    console.log(stop);
-    clearInterval(stop);
-  };
+  useEffect(() => {
+    fetchMoviesHandler()
+  }, [fetchMoviesHandler]);
+
+  // const stopRetryingHandler = () => {
+  //   console.log(stop);
+  //   clearInterval(stop);
+  // };
 
   let content = <p>Found no movies</p>;
   if (movies.length > 0) {
@@ -64,7 +69,7 @@ function App() {
     <React.Fragment>
       <section>
         <button onClick={fetchMoviesHandler}>Fetch Movies</button>
-        <button onClick={stopRetryingHandler}>Cancel</button>
+        {/* <button onClick={stopRetryingHandler}>Cancel</button> */}
       </section>
       <section>{content}</section>
     </React.Fragment>
